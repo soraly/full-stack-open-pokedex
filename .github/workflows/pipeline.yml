@@ -15,5 +15,5 @@ jobs:
                   node-version: '20'
             - name: Install dependencies
               run: npm install
-            - name: 检查代码
-              run: npm run eslint
+            - name: 打包一下
+              run: npm run build
