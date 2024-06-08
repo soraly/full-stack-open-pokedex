@@ -6,25 +6,23 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy_pokemon:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
+    - uses: actions/setup-node@v4
       with:
-        node-version: '14'  # 根据需要指定Node版本
-
-    - name: Install dependencies
+          node-version: '20'  
+          
+    - name: 安装依赖
       run: npm install
 
-    - name: Build
+    - name: 打包构建
       run: npm run build  # 如果有构建步骤的话
 
     - name: Deploy to Render
-      uses: renderinc/render-deploy-action@v1
+      uses: johnbeynon/render-deploy-action@v0.0.8
       with:
         api_key: ${{ secrets.RENDER_API_KEY }}
         service_id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
