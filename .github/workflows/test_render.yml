@@ -18,5 +18,5 @@ jobs:
     - name: 部署到Render
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
-        service_id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
-        api_key: ${{ secrets.RENDER_API_KEY }}
+        service-id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
+        api-key: ${{ secrets.RENDER_API_KEY }}
