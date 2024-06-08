@@ -9,21 +9,14 @@ jobs:
   deploy_pokemon:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
+    - name: 检出代码
       uses: actions/checkout@v2
     - uses: actions/setup-node@v4
       with:
           node-version: '20'  
 
-    - name: 安装依赖
-      run: npm install
-
-    - name: 打包构建
-      run: npm run build  # 如果有构建步骤的话
-
-    - name: Deploy to Render
+    - name: 部署到Render
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
         service_id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
         api_key: ${{ secrets.RENDER_API_KEY }}
-        wait-for-success: true
