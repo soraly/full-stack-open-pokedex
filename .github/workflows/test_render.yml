@@ -1,0 +1,31 @@
+name: 部署到render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # 根据需要指定Node版本
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build  # 如果有构建步骤的话
+
+    - name: Deploy to Render
+      uses: renderinc/render-deploy-action@v1
+      with:
+        api_key: ${{ secrets.RENDER_API_KEY }}
+        service_id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
+        build_files: './build'  # Directory path of build files
