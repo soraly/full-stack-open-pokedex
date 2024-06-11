@@ -1,70 +1,53 @@
-# name: 部署到render
+name: 版本号配置嘿嘿
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize]
 
-# jobs:
-  # deploy_pokemon:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: 检出代码
-  #     uses: actions/checkout@v2
-  #   - uses: actions/setup-node@v4
-  #     with:
-  #         node-version: '20'  
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'  # 确保获取完整的Git历史
 
-  #   - name: 部署到Render
-  #     uses: johnbeynon/render-deploy-action@v0.0.8
-  #     with:
-  #       service-id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
-  #       api-key: {{ secrets.RENDER_API_KEY }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-  name: 版本号配置嘿嘿
+      - name: 安装依赖
+        run: npm install
 
-  on:
-    push:
-      branches:
-        - main
-    pull_request:
-      branches:
-        - main
-      types: [opened, synchronize]
-  
-  jobs:
-    simple_deployment_pipeline:
-      runs-on: ubuntu-20.04
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-  
-        - name: Set up Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
-  
-        - name: 安装依赖
-          run: npm install
-  
-        - name: 构建
-          run: npm run build
-  
-        - name: 部署到Render
-          uses: johnbeynon/render-deploy-action@v0.0.8
-          with:
-            service-id: 'srv-cpi3upsf7o1s73bbn5hg'  # Replace with your Render Service ID
-            api-key: ${{ secrets.RENDER_API_KEY }}
+      - name: 构建
+        run: npm run build
 
-    tag_release:
-      needs: simple_deployment_pipeline
-      runs-on: ubuntu-20.04
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      steps:
-        - name: Bump version and push tag
-          uses: anothrNick/github-tag-action@1.36.0
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            DEFAULT_BUMP: patch
-            WITH_V: true
-  
+      - name: 部署到Render
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: 'srv-cpi3upsf7o1s73bbn5hg'
+          api-key: ${{ secrets.RENDER_API_KEY }}
+
+  tag_release:
+    needs: simple_deployment_pipeline
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'  # 确保获取完整的Git历史
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          WITH_V: true
