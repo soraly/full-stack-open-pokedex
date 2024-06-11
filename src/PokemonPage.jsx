@@ -58,7 +58,7 @@ const PokemonPage = ({ previous, next }) => {
                     <td className="pokemon-stats-value">{value}</td>
                   </tr>
                 ))}
-                种族值
+                种族值是
                 {stats.reduce((base, cur) => {
                   return base + cur.value;
                 }, 0)}
