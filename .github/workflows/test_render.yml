@@ -31,7 +31,7 @@ jobs:
 
       - name: 部署到Render
         # 检查是否需要跳过部署
-        if: '!contains(github.event.head_commit.message, "#skip")' 
+        if: true && !contains(github.event.head_commit.message, '#skip')  
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: 'srv-cpi3upsf7o1s73bbn5hg'
