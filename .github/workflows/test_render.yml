@@ -30,6 +30,8 @@ jobs:
         run: npm run build
 
       - name: 部署到Render
+        # 检查是否需要跳过部署
+        if: '!contains(github.event.head_commit.message, "#skip")' 
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: 'srv-cpi3upsf7o1s73bbn5hg'
@@ -38,7 +40,8 @@ jobs:
   tag_release:
     needs: simple_deployment_pipeline
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # 检查是否需要跳过标记
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip')  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
